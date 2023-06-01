@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import os.path
 import re
 import socket
 import sys
@@ -44,8 +45,11 @@ IGNORE_MACS = {"00:00:00:00:00:00", "ff:ff:ff:ff:ff:ff"}
 
 def load_resolv_conf() -> list[str]:
     """Load the resolv.conf."""
-    with open("/etc/resolv.conf") as file:
-        lines = tuple(file)
+    if os.path.exists("/etc/resolv.conf"):
+        with open("/etc/resolv.conf") as file:
+            lines = tuple(file)
+    else:
+        lines = []
     nameservers = set()
     for line in lines:
         line = line.strip()
